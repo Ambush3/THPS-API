@@ -255,13 +255,13 @@ const skaters = {
 // })
 
 app.get('/', (request, response) => {
-    db.collection('rappers').find().sort({ skatersName }).toArray()
-        .then(data => {
-            response.render('index.ejs', { info: data })
+    db.collection('skaters').find().toArray((err, result) => {
+        if (err) return console.log(err)
+        response.render('index.ejs', {
+            skaters: result
         })
-        .catch(error => console.error(error))
+    })
 })
-
 
 app.get('/api/:skaters', (req, res) => {
     const skatersName = req.params.skaters;
