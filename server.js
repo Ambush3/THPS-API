@@ -3,28 +3,28 @@ const app = express();
 const path = require('path');
 const port = 8000
 const MongoClient = require('mongodb').MongoClient;
-require('dotenv').config();
+require('dotenv').config(); // Loads .env file into process.env
 
 let db,
     dbConnectionStr = `mongodb+srv://ambush333:digDih-fafnuh-waqsy3@cluster0.v2fnu.mongodb.net/?retryWrites=true&w=majority`
 dbName = 'cluster0';
 
-MongoClient.connect(dbConnectionStr, (err, client) => {
-    if (err) {
-        console.log(err);
-        return;
+MongoClient.connect(dbConnectionStr, (err, client) => { // connect to the database
+    if (err) { // if there is an error
+        console.log(err); // log the error
+        return; // stop the function
     }
-    db = client.db(dbName);
-    app.listen(port, () => {
-        console.log(`Listening on port ${port}`);
+    db = client.db(dbName); // assign the database to the db variable
+    app.listen(port, () => { // start the server
+        console.log(`Listening on port ${port}`); // log the port
     });
 });
 
 // middleware
-app.set('view engine', 'ejs');
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.set('view engine', 'ejs'); // set the view engine to ejs
+app.use(express.json()); // set the application to parse JSON
+app.use(express.urlencoded({ extended: true })); // set the application to parse URL encoded data
+app.use(express.static('public')); // set the application to use the public folder
 
 
 const skaters = {
@@ -254,10 +254,10 @@ const skaters = {
 //     res.sendFile(path.join(__dirname + '/public/index.html'));
 // })
 
-app.get('/', (request, response) => {
+app.get('/', (req, res) => {
     db.collection('skaters').find().toArray((err, result) => {
         if (err) return console.log(err)
-        response.render('index.ejs', {
+        res.render('index.ejs', {
             skaters: result
         })
     })
@@ -273,7 +273,7 @@ app.get('/api/:skaters', (req, res) => {
 })
 
 
-app.post('/api/skaters', (req, res) => {
+app.post('/api/:skaters', (req, res) => {
     const newSkater = {
         'name': req.body.name,
         'footing': req.body.footing,
