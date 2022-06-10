@@ -6,7 +6,7 @@ const MongoClient = require('mongodb').MongoClient;
 require('dotenv').config(); // Loads .env file into process.env
 
 let db,
-    dbConnectionStr = `mongodb+srv://ambush333:digDih-fafnuh-waqsy3@cluster0.v2fnu.mongodb.net/?retryWrites=true&w=majority`
+    dbConnectionStr = process.env.DB_STRING,
 dbName = 'cluster0';
 
 MongoClient.connect(dbConnectionStr, (err, client) => { // connect to the database
